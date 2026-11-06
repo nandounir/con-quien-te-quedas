@@ -176,6 +176,41 @@ img{display:block}
 @media (max-width:820px){.squad{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}}
 @media (max-width:420px){.sq{padding:7px 10px 7px 7px;gap:9px;min-height:52px}.sq .face{width:36px}.sq b{font-size:14px}.sq i{font-size:14px}}
 
+/* ---------- RANKING DE LA AFICIÓN ---------- */
+#comm{min-height:100vh}
+.c-meta{margin:-12px 0 26px;font:500 18px/1.3 var(--text);opacity:.85}
+.c-cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+.c-card{background:#fff;color:var(--ink);border-radius:18px;padding:22px 22px 24px}
+.c-card .k{font:700 15px/1 var(--display);letter-spacing:.16em;text-transform:uppercase;color:var(--posc)}
+.c-card .who{display:flex;align-items:center;gap:14px;margin:16px 0 14px}
+.c-card .face{width:58px;box-shadow:none;background:var(--pbg)}
+.c-card .face img{transform:scale(1.25);object-position:50% 10%}
+.c-card .face.none span{font-size:22px}
+.c-card .who b{font:800 clamp(22px,2.2vw,30px)/.95 var(--display);text-transform:uppercase;overflow-wrap:normal;word-break:normal;min-width:0}
+.c-card p{margin:0;color:var(--muted);font:500 16px/1.35 var(--text)}
+.c-card p strong{font:800 30px/1 var(--display);color:var(--ink)}
+.c-lists{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
+.c-list{background:#fff;color:var(--ink);border-radius:18px;padding:24px 24px 12px}
+.c-list h3{margin:0 0 10px;font:italic 800 clamp(26px,3vw,38px)/1 var(--display);text-transform:uppercase}
+.c-row{display:grid;grid-template-columns:44px minmax(0,1fr) minmax(70px,150px) 58px;align-items:center;gap:14px;padding:9px 0}
+.c-row .face{width:44px;box-shadow:none;background:var(--pbg)}
+.c-row .face img{transform:scale(1.25);object-position:50% 10%}
+.c-row .face.none span{font-size:16px}
+.c-row .nm{font:600 18px/1.15 var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.c-row .barx{height:10px;border-radius:9px;background:#ece9e3;overflow:hidden}
+.c-row .barx i{display:block;height:100%;border-radius:9px;background:var(--posc)}
+.c-list.low .c-row .barx i{background:#5f6673}
+.c-row .pc{font:800 24px/1 var(--display);text-align:right}
+.c-empty{background:#fff;color:var(--ink);border-radius:18px;padding:34px;text-align:center}
+.c-empty h3{margin:0 0 8px;font:italic 800 34px/1 var(--display);text-transform:uppercase}
+.c-empty p{margin:0 auto 18px;max-width:520px;color:var(--muted);font-size:17px}
+.c-actions{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:26px}
+.c-actions[hidden]{display:none}
+.c-empty .btn{color:#fff;background:var(--ink);border-color:var(--ink)}
+@media (max-width:1000px){.c-cards{grid-template-columns:repeat(2,minmax(0,1fr))}.c-lists{grid-template-columns:1fr}}
+@media (max-width:560px){.c-cards{grid-template-columns:1fr;gap:10px}.c-card{padding:16px}.c-card .face{width:46px}.c-card .who b{font-size:20px}.c-card p strong{font-size:24px}.c-card p{font-size:14px}
+  .c-row{grid-template-columns:38px minmax(0,1fr) 64px 46px;gap:10px}.c-row .face{width:38px}.c-row .nm{font-size:15px}.c-row .pc{font-size:20px}}
+
 /* ---------- AVISOS / COMPARTIR ---------- */
 .modal{position:fixed;inset:0;background:#0d1117b3;display:none;place-items:center;z-index:20;padding:16px;overflow:auto}
 .modal.on{display:grid}
@@ -280,11 +315,32 @@ img{display:block}
       <p class="t-count" id="tCount"></p>
       <div class="t-actions">
         <button class="btn dark" id="tStart">Empezar</button>
+        <button class="btn" id="tComm" hidden>Ranking de la afición</button>
         <button class="btn" id="tResume" hidden></button>
-        <button class="btn" id="tSeen" hidden>Ver mi orden</button>
+        <button class="btn" id="tSeen" hidden>Ver mi último orden</button>
       </div>
     </div>
     <div class="squad" id="tSquad"></div>
+  </div>
+</section>
+
+<!-- RANKING DE LA AFICIÓN -->
+<section class="view duel-view" id="comm">
+  <div class="duel-wrap" style="max-width:1280px">
+    <div class="bar">
+      <button class="back" id="cBack"><span aria-hidden="true">←</span><img id="cCrestS" alt=""><span id="cTeamS"></span></button>
+      <span data-seal data-lock></span>
+    </div>
+    <div class="t-head">
+      <img id="cCrest" alt="">
+      <div><div class="kick">Ranking de la afición</div><h2 id="cName"></h2></div>
+    </div>
+    <p class="c-meta" id="cMeta"></p>
+    <div id="cBody"></div>
+    <div class="c-actions" id="cActions" hidden>
+      <button class="btn solid" id="cShare">Compartir ranking</button>
+      <button class="btn" id="cPlay2">Hacer mi orden</button>
+    </div>
   </div>
 </section>
 
@@ -328,6 +384,7 @@ img{display:block}
     <div class="list" id="list"></div>
     <div class="res-actions">
       <button class="btn share" id="rShare">Compartir mi orden</button>
+      <button class="btn" id="rComm" hidden>Ranking de la afición</button>
       <button class="btn" id="rAgain">Repetir</button>
       <button class="btn dark" id="rHome">Volver a equipos</button>
     </div>
@@ -339,7 +396,7 @@ img{display:block}
   <button class="close" id="sClose" aria-label="Cerrar">×</button>
   <img class="prev" id="sImg" alt="Imagen de tu orden para compartir">
   <div>
-    <h3>Comparte tu orden</h3>
+    <h3 id="sTitle">Comparte tu orden</h3>
     <p style="margin:8px 0 0">Descarga la imagen y súbela a tus redes, o envía el enlace del juego.</p>
     <div class="row2">
       <button class="btn dark" id="sSave">Descargar imagen</button>
@@ -359,6 +416,11 @@ img{display:block}
   /* Enlace público del juego que se adjunta al compartir (se rellena al publicar). */
   var GAME_URL = 'https://conquientequedas.theeyeintelligence.es/';
   var BRAND = 'THE EYE INTELLIGENCE UNIT';
+  /* Ranking de la afición: base de datos pública (Supabase). Clave «anon»: pública por diseño, solo permite
+     guardar órdenes nuevos y leer las estadísticas agregadas. */
+  var SB_URL = 'https://oyiswydbzoskbglrsvcn.supabase.co';
+  var SB_KEY = 'sb_publishable_xmMotDelXwMnlV4V-8chqg_tAOKAhnZ';
+  var COMM_ON = !!(SB_URL && SB_KEY && /^https?:/.test(location.protocol) && !/claudeusercontent|claude\.ai/.test(location.host));
 
   var DATA = window.APP_DATA || { teams: [], players: {} };
   var PH = window.ADNP_PHOTOS = window.ADNP_PHOTOS || {};
@@ -405,7 +467,7 @@ img{display:block}
       s.onload = s.onerror = function () { res(); }; document.head.appendChild(s);
     });
   }
-  function show(id) { ['home', 'team', 'duel', 'res'].forEach(function (v) { $(v).classList.toggle('on', v === id); }); window.scrollTo(0, 0); }
+  function show(id) { ['home', 'team', 'comm', 'duel', 'res'].forEach(function (v) { $(v).classList.toggle('on', v === id); }); window.scrollTo(0, 0); }
 
   /* ---------- MEMORIA: progreso y resultados ----------
      1) navegador del jugador (localStorage): funciona para todo el mundo
@@ -539,12 +601,72 @@ img{display:block}
       $('tResume').textContent = 'Seguir donde lo dejaste (' + Math.min(99, Math.floor(r.done / Math.max(1, worstCase(selected(t.id, selFrom(pr.sel)).length)) * 100)) + '%)';
     }
     $('tSeen').hidden = !(rs && rs.rows && rs.names);
+    $('tComm').hidden = !COMM_ON;
     $('tSquad').innerHTML = all.map(function (p) {
       return '<div class="sq' + (T.sel[lineOf(p)] ? '' : ' off') + '">' + face(t.id, p) + '<b>' + esc(p.name) + '</b><i>' + (ABBR[p.pos] || '') + '</i></div>';
     }).join('');
   }
   function selFrom(k) { var s = {}; LINES.forEach(function (l) { s[l[0]] = (k || '').indexOf(l[0]) >= 0; }); return s; }
   $('tBack').onclick = function () { location.hash = ''; };
+  $('tComm').onclick = function () { openComm(T.team); };
+  $('cBack').onclick = function () { openTeam(CT.id); };
+
+  /* ---------- RANKING DE LA AFICIÓN ---------- */
+  var CT = null, COMM = null;
+  function commText() { return 'Ranking de la afición del ' + COMM.team.name + ' en «¿Con quién te quedas?» 👉 Favorito: ' + COMM.fav.p.name + ' (' + pc(COMM.fav.first) + ' lo ponen n.º 1) — ADN PLAYER · ' + BRAND; }
+  function sb(path, body) {
+    return fetch(SB_URL + '/rest/v1/' + path, { method: 'POST', headers: { 'apikey': SB_KEY,
+      'Content-Type': 'application/json', 'Prefer': 'return=minimal' }, body: JSON.stringify(body) })
+      .then(function (r) { if (!r.ok) throw new Error(r.status); return (r.status === 204 || r.status === 201) ? null : r.json(); });
+  }
+  function submitRanking(tid, names) {
+    if (!COMM_ON || names.length < 2) return;
+    sb('rankings', { team_id: tid, players: names }).catch(function () {});
+  }
+  function pc(x) { return Math.round(x * 100) + '%'; }
+  function openComm(t) {
+    CT = t;
+    teamVars($('comm'), t);
+    $('cCrest').src = $('cCrestS').src = t.crest; $('cName').textContent = t.name; $('cTeamS').textContent = t.name;
+    $('cMeta').textContent = 'Cargando…'; $('cBody').innerHTML = ''; $('cActions').hidden = true; COMM = null;
+    show('comm');
+    Promise.all([loadPhotos(t.id), sb('rpc/community_stats', { p_team: t.id })]).then(function (r) { renderComm(t, r[1] || { total: 0, players: [] }); },
+      function () { $('cMeta').textContent = 'No se ha podido cargar el ranking ahora mismo. Inténtalo en un momento.'; });
+  }
+  function renderComm(t, data) {
+    var all = DATA.players[t.id] || [], byName = {}; all.forEach(function (p) { byName[p.name] = p; });
+    var rows = (data.players || []).filter(function (x) { return byName[x.name] && x.c >= 1; }).map(function (x) {
+      return { p: byName[x.name], c: x.c, first: x.first / x.c, top3: x.top3 / x.c, bot3: x.bottom3 / x.c, topq: x.topq / x.c, botq: x.botq / x.c, avg: x.avgpos };
+    });
+    var total = data.total || 0;
+    if (total < 3 || rows.length < 4) {
+      $('cMeta').textContent = total ? 'Basado en ' + total + (total === 1 ? ' orden' : ' órdenes') + ' de la afición.' : '';
+      $('cBody').innerHTML = '<div class="c-empty"><h3>Aún faltan votos</h3><p>El ranking de la afición aparece en cuanto haya unos cuantos órdenes de esta plantilla. ¡Sé de los primeros!</p><button class="btn" id="cPlay">Hacer mi orden</button></div>';
+      $('cPlay').onclick = function () { openTeam(t.id); };
+      return;
+    }
+    $('cMeta').textContent = 'Basado en ' + total.toLocaleString('es-ES') + ' órdenes de la afición · se actualiza con cada partida';
+    var by = function (k, dir) { return rows.slice().sort(function (a, b) { return dir * (b[k] - a[k]) || a.avg - b.avg; }); };
+    var fav = by('first', 1)[0];
+    var reg = by('top3', 1).filter(function (x) { return x !== fav; })[0];
+    var div = rows.slice().sort(function (a, b) { return Math.min(b.topq, b.botq) - Math.min(a.topq, a.botq) || (b.topq + b.botq) - (a.topq + a.botq); })[0];
+    var last = by('bot3', 1)[0];
+    COMM = { team: t, total: total, fav: fav, reg: reg, div: div, last: last, top3: by('top3', 1), bot3: by('bot3', 1) };
+    $('cActions').hidden = false;
+    var card = function (k, x, txt) { return '<div class="c-card"><div class="k">' + k + '</div><div class="who">' + face(t.id, x.p) + '<b>' + esc(x.p.name) + '</b></div><p>' + txt + '</p></div>'; };
+    var html = '<div class="c-cards">' +
+      card('Favorito de la afición', fav, '<strong>' + pc(fav.first) + '</strong> lo ponen el n.º 1') +
+      card('Fijo en el top 3', reg, 'En el <strong>' + pc(reg.top3) + '</strong> de los top 3') +
+      card('El que más divide', div, '<strong>' + pc(div.topq) + '</strong> lo ponen arriba · <strong>' + pc(div.botq) + '</strong> abajo') +
+      card('Suele quedar último', last, 'En el <strong>' + pc(last.bot3) + '</strong> de los 3 últimos') + '</div>';
+    var list = function (title, k, cls) {
+      return '<div class="c-list ' + cls + '"><h3>' + title + '</h3>' + by(k, 1).slice(0, 8).map(function (x) {
+        return '<div class="c-row">' + face(t.id, x.p) + '<span class="nm">' + esc(x.p.name) + '</span><span class="barx"><i style="width:' + Math.round(x[k] * 100) + '%"></i></span><span class="pc">' + pc(x[k]) + '</span></div>';
+      }).join('') + '</div>';
+    };
+    html += '<div class="c-lists">' + list('Más veces en el top 3', 'top3', '') + list('Más veces en los 3 últimos', 'bot3', 'low') + '</div>';
+    $('cBody').innerHTML = html;
+  }
   $('tStart').onclick = function () { start(T.team, T.sel, null); };
   $('tResume').onclick = function () { var pr = ST.prog[T.team.id]; start(T.team, selFrom(pr.sel), pr); };
   $('tSeen').onclick = function () {
@@ -590,6 +712,7 @@ img{display:block}
       delete ST.prog[G.team.id];
       ST.res[G.team.id] = { names: flat.map(function (p) { return p.name; }), rows: 1, sel: selKey(G.sel), at: Date.now() };
       persist();
+      submitRanking(G.team.id, flat.map(function (p) { return p.name; }));
       return showResult(flat.map(function (p, i) { return { r: i + 1, p: p }; }));
     }
     var pct = Math.min(99, Math.floor(r.done / Math.max(1, G.total) * 100));
@@ -639,6 +762,8 @@ img{display:block}
     show('res');
   }
   $('rAgain').onclick = function () { start(G.team, G.sel, null); };
+  $('rComm').hidden = !COMM_ON;
+  $('rComm').onclick = function () { openComm(G.team); };
   $('rHome').onclick = function () { location.hash = ''; };
   $('rBack').onclick = function () { openTeam(G.team.id); };
 
@@ -771,17 +896,83 @@ img{display:block}
       return cv;
     });
   }
-  var SHARE = { blob: null, file: '' };
+  function buildCommImage() {
+    var C = COMM, t = C.team, P = pal(t), W = 1080, H = 1350, tid = t.id;
+    var picks = [C.fav, C.reg, C.div, C.last].concat(C.top3.slice(0, 4));
+    var fonts = ['800 40px "Barlow Condensed"', 'italic 800 40px "Barlow Condensed"', '700 20px "Barlow Condensed"', '600 20px Barlow', '400 30px Anton', '700 12px "JetBrains Mono"'];
+    var fontsReady = document.fonts ? Promise.all(fonts.map(function (f) { return document.fonts.load(f); })).catch(function () {}) : Promise.resolve();
+    return Promise.all([fontsReady, img(t.crest)].concat(picks.map(function (x) { return img(photo(tid, x.p)); }))).then(function (r) {
+      var crest = r[1], ims = r.slice(2);
+      var cv = document.createElement('canvas'); cv.width = W; cv.height = H;
+      var ctx = cv.getContext('2d'), LS = function (v) { if (ctx.letterSpacing !== undefined) ctx.letterSpacing = v; };
+      ctx.fillStyle = P.c1; ctx.fillRect(0, 0, W, H);
+      ctx.save(); ctx.fillStyle = alpha(P.stripe, .2);
+      ctx.beginPath(); ctx.moveTo(760, 0); ctx.lineTo(880, 0); ctx.lineTo(280, H); ctx.lineTo(160, H); ctx.fill();
+      ctx.fillStyle = alpha(P.stripe, .3);
+      ctx.beginPath(); ctx.moveTo(925, 0); ctx.lineTo(965, 0); ctx.lineTo(365, H); ctx.lineTo(325, H); ctx.fill();
+      ctx.restore();
+      ctx.fillStyle = P.fg; ctx.textBaseline = 'middle'; ctx.textAlign = 'left';
+      ctx.font = '800 32px "Barlow Condensed", sans-serif'; LS('4px');
+      ctx.fillText('ADN PLAYER', 58, 62);
+      var aw = ctx.measureText('ADN PLAYER').width; LS('0px');
+      ctx.globalAlpha = .35; ctx.fillRect(58 + aw + 22, 38, 2, 48); ctx.globalAlpha = 1;
+      seal(ctx, 58 + aw + 46, 38, 1.15, P.fg);
+      ctx.textAlign = 'right'; ctx.globalAlpha = .8; ctx.font = '700 22px "Barlow Condensed", sans-serif'; LS('3px');
+      ctx.fillText('PRIMERA RFEF', W - 58, 62); LS('0px');
+      ctx.globalAlpha = 1; ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic';
+      brackets(ctx, 36, 118, W - 72, 1086, 46, alpha(P.fg, .55));
+      if (crest) { var cs = 124, cr = Math.min(cs / crest.width, cs / crest.height); ctx.drawImage(crest, 74, 160 + (cs - crest.height * cr) / 2, crest.width * cr, crest.height * cr); }
+      ctx.fillStyle = P.fg;
+      ctx.font = 'italic 800 62px "Barlow Condensed", sans-serif'; ctx.fillText(fit(ctx, 'RANKING DE LA AFICIÓN', 'italic 800 %px "Barlow Condensed", sans-serif', 62, 780, 40), 222, 226);
+      var tn = fit(ctx, (t.name + ' · ' + C.total.toLocaleString('es-ES') + ' órdenes').toUpperCase(), '700 %px "Barlow Condensed", sans-serif', 38, 780, 24);
+      ctx.globalAlpha = .9; ctx.fillText(tn, 224, 276); ctx.globalAlpha = 1;
+      var PX = 70, PY = 318, PW = W - 140, PH = 846;
+      ctx.save(); ctx.shadowColor = 'rgba(0,0,0,.28)'; ctx.shadowBlur = 40; ctx.shadowOffsetY = 14;
+      round(ctx, PX, PY, PW, PH, 30); ctx.fillStyle = '#fff'; ctx.fill(); ctx.restore();
+      var cells = [['FAVORITO DE LA AFICIÓN', C.fav, pc(C.fav.first), 'lo ponen el n.º 1'], ['FIJO EN EL TOP 3', C.reg, pc(C.reg.top3), 'de los top 3'],
+                   ['EL QUE MÁS DIVIDE', C.div, pc(C.div.topq) + ' / ' + pc(C.div.botq), 'arriba / abajo'], ['SUELE QUEDAR ÚLTIMO', C.last, pc(C.last.bot3), 'de los 3 últimos']];
+      cells.forEach(function (c, i) {
+        var cx = PX + 30 + (i % 2) * 445, cy = PY + 30 + Math.floor(i / 2) * 250, cw = 425;
+        round(ctx, cx, cy, cw, 230, 20); ctx.fillStyle = '#f6f3ee'; ctx.fill();
+        ctx.fillStyle = P.posc; ctx.font = '700 19px "Barlow Condensed", sans-serif'; LS('3px'); ctx.fillText(c[0], cx + 24, cy + 40); LS('0px');
+        circleFace(ctx, ims[i], c[1].p, cx + 66, cy + 110, 42, P, 0);
+        ctx.fillStyle = '#14181f';
+        ctx.fillText(fit(ctx, c[1].p.name.toUpperCase(), '800 %px "Barlow Condensed", sans-serif', 34, cw - 150, 20), cx + 124, cy + 122);
+        ctx.font = '800 46px "Barlow Condensed", sans-serif'; ctx.fillText(c[2], cx + 24, cy + 202);
+        var pw = ctx.measureText(c[2]).width;
+        ctx.fillStyle = '#6c7079'; ctx.font = '600 20px Barlow, sans-serif'; ctx.fillText(c[3], cx + 34 + pw, cy + 200);
+      });
+      var ly = PY + 560;
+      ctx.fillStyle = '#14181f'; ctx.font = 'italic 800 40px "Barlow Condensed", sans-serif'; ctx.fillText('MÁS VECES EN EL TOP 3', PX + 34, ly);
+      C.top3.slice(0, 4).forEach(function (x, k) {
+        var y = ly + 26 + k * 62;
+        circleFace(ctx, ims[4 + k], x.p, PX + 60, y + 28, 24, P, 0);
+        ctx.fillStyle = '#14181f'; ctx.fillText(fit(ctx, x.p.name, '600 %px Barlow, sans-serif', 26, 330, 16), PX + 100, y + 37);
+        round(ctx, PX + 470, y + 21, 300, 14, 7); ctx.fillStyle = '#ece9e3'; ctx.fill();
+        round(ctx, PX + 470, y + 21, Math.max(14, 300 * x.top3), 14, 7); ctx.fillStyle = P.posc; ctx.fill();
+        ctx.fillStyle = '#14181f'; ctx.font = '800 32px "Barlow Condensed", sans-serif'; ctx.textAlign = 'right';
+        ctx.fillText(pc(x.top3), PX + PW - 34, y + 40); ctx.textAlign = 'left';
+      });
+      ctx.globalAlpha = .3; ctx.fillStyle = P.fg; ctx.fillRect(58, 1222, W - 116, 2); ctx.globalAlpha = 1;
+      ctx.fillStyle = P.fg; ctx.font = 'italic 800 48px "Barlow Condensed", sans-serif'; ctx.fillText('¿Y TÚ, CON QUIÉN TE QUEDAS?', 58, 1292);
+      var sw = seal(ctx, 0, -999, 1.15, P.fg);
+      seal(ctx, W - 58 - sw, 1250, 1.15, P.fg);
+      return cv;
+    });
+  }
+  var SHARE = { blob: null, file: '', ctx: null };
   function shareText() {
     var top = LAST.slice(0, 3).map(function (x) { return x.r + '. ' + x.p.name; }).join(' · ');
     return 'Mi orden del ' + G.team.name + ' en «¿Con quién te quedas?» 👉 ' + top + ' — ADN PLAYER · ' + BRAND;
   }
   function gameUrl() { return (/^https?:/.test(location.protocol) && !/claudeusercontent|claude\.ai/.test(location.host)) ? location.href.split('#')[0] : GAME_URL; }
   function setStatus(t) { $('sStatus').textContent = t; if (t) setTimeout(function () { if ($('sStatus').textContent === t) $('sStatus').textContent = ''; }, 3500); }
-  $('rShare').onclick = function () {
+  function openShare(ctx) {
+    SHARE.ctx = ctx; SHARE.blob = null;
+    $('sTitle').textContent = ctx.title;
     $('sImg').removeAttribute('src'); setStatus('Preparando la imagen…');
     $('share').classList.add('on');
-    var txt = shareText(), url = gameUrl(), e = encodeURIComponent;
+    var txt = ctx.text(), url = gameUrl(), e = encodeURIComponent;
     var full = txt + (url ? ' ' + url : '');
     var ic = {
       x: '<svg viewBox="0 0 24 24"><path d="M18.9 2H22l-7.4 8.5L23.3 22h-6.8l-5.3-6.9L5 22H2l7.9-9.1L1.6 2h6.9l4.8 6.3L18.9 2Zm-1.2 18h1.7L7.4 3.9H5.6L17.7 20Z"/></svg>',
@@ -797,17 +988,27 @@ img{display:block}
     ];
     if (url) links.push(['fb', 'Facebook', 'https://www.facebook.com/sharer/sharer.php?u=' + e(url)], ['li', 'LinkedIn', 'https://www.linkedin.com/sharing/share-offsite/?url=' + e(url)]);
     $('sSoc').innerHTML = links.map(function (l) { return '<a class="' + l[0] + '" href="' + l[2] + '" target="_blank" rel="noopener">' + ic[l[0]] + l[1] + '</a>'; }).join('');
-    buildImage().then(function (cv) {
+    ctx.build().then(function (cv) {
       $('sImg').src = cv.toDataURL('image/png');
       cv.toBlob(function (b) {
         SHARE.blob = b;
-        SHARE.file = 'con-quien-te-quedas-' + G.team.name.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-') + '.png';
+        SHARE.file = ctx.file + '-' + ctx.team.name.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-') + '.png';
         var f = null; try { f = new File([b], SHARE.file, { type: 'image/png' }); } catch (x) {}
         $('sNative').hidden = !(f && navigator.canShare && navigator.canShare({ files: [f] }));
         setStatus('');
       }, 'image/png');
     }).catch(function () { setStatus('No se pudo generar la imagen.'); });
+  }
+  $('rShare').onclick = function () {
+    openShare({ title: 'Comparte tu orden', file: 'con-quien-te-quedas', team: G.team, build: buildImage, text: shareText,
+      copy: function () { return LAST.map(function (x) { return x.r + '. ' + x.p.name + ' (' + x.p.pos + ')'; }).join('\n'); } });
   };
+  $('cShare').onclick = function () {
+    if (!COMM) return;
+    openShare({ title: 'Comparte el ranking', file: 'ranking-aficion', team: COMM.team, build: buildCommImage, text: commText,
+      copy: function () { return COMM.top3.slice(0, 10).map(function (x, i) { return (i + 1) + '. ' + x.p.name + ' — en el ' + pc(x.top3) + ' de los top 3'; }).join('\n'); } });
+  };
+  $('cPlay2').onclick = function () { openTeam(COMM.team.id); };
   $('sClose').onclick = function () { $('share').classList.remove('on'); };
   $('share').onclick = function (e) { if (e.target === $('share')) $('share').classList.remove('on'); };
   $('sSave').onclick = function () {
@@ -829,11 +1030,11 @@ img{display:block}
     try {
       var f = new File([SHARE.blob], SHARE.file, { type: 'image/png' });
       var url = gameUrl();
-      navigator.share({ files: [f], text: shareText() + (url ? ' ' + url : ''), title: '¿Con quién te quedas?' }).catch(function () {});
+      navigator.share({ files: [f], text: SHARE.ctx.text() + (url ? ' ' + url : ''), title: '¿Con quién te quedas?' }).catch(function () {});
     } catch (e) {}
   };
   $('sCopy').onclick = function () {
-    var url = gameUrl(), txt = shareText() + (url ? ' ' + url : '') + '\n\n' + LAST.map(function (x) { return x.r + '. ' + x.p.name + ' (' + x.p.pos + ')'; }).join('\n');
+    var url = gameUrl(), txt = SHARE.ctx.text() + (url ? ' ' + url : '') + '\n\n' + SHARE.ctx.copy();
     var ok = function () { setStatus('Texto copiado.'); };
     var fb = function () { var ta = document.createElement('textarea'); ta.value = txt; document.body.appendChild(ta); ta.select(); try { document.execCommand('copy'); ok(); } catch (e) { setStatus('No se pudo copiar.'); } ta.remove(); };
     try { navigator.clipboard.writeText(txt).then(ok, fb); } catch (e) { fb(); }
