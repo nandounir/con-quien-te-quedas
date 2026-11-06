@@ -1,0 +1,8 @@
+Para rehacer data.js y las imágenes desde ADN PLAYER (por ejemplo tras una nueva jornada):
+
+  python build_from_dna.py <carpeta PLAYER_DNA> <carpeta de este proyecto> grupos_equipos.json
+
+- Plantilla de cada equipo = jugadores de PLAYER_DNA/data/dna_demarcaciones.json (los mismos de ADN PLAYER).
+- Foto = el mismo emparejado que usa ADN PLAYER (dna_media.py) + coincidencias de nombre en su equipo.
+- Colores de cada club = sacados del escudo; correcciones a mano en build_data_colors.py (COLOR_FIX).
+La app no necesita esta carpeta para funcionar.
