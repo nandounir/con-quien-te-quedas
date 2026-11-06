@@ -27,8 +27,20 @@ for line in (dna / 'app' / 'alias_base.csv').read_text(encoding='utf-8').splitli
     alias[(dm._tk(eq), dm._n(sobra))] = oficial
 
 DEM = {'POR': 'Portero', 'DFC': 'Defensa central', 'LAT': 'Lateral', 'MCD': 'Mediocentro',
-       'MCO': 'Mediapunta', 'EXT': 'Extremo', 'DC': 'Delantero centro'}
-LINE = {'POR': 0, 'DFC': 1, 'LAT': 2, 'MCD': 3, 'MCO': 4, 'EXT': 5, 'DC': 6}
+       'MCO': 'Mediapunta', 'EXT': 'Extremo', 'DC': 'Delantero centro',
+       'G_POR': 'Portero', 'G_DEF': 'Defensa', 'G_MED': 'Centrocampista', 'G_DEL': 'Delantero'}
+LINE = {'POR': 0, 'G_POR': 0, 'DFC': 1, 'LAT': 2, 'G_DEF': 2.5, 'MCD': 3, 'MCO': 4, 'G_MED': 4.5, 'EXT': 5, 'DC': 6, 'G_DEL': 6.5}
+GEN = {'Portero': 'G_POR', 'Defensa': 'G_DEF', 'Centrocampista': 'G_MED', 'Delantero': 'G_DEL'}
+# Lista completa de ADN PLAYER = jugadores con minutos (dna_estado.json). Los que aún no tienen demarcación fina
+# entran con su línea (Portero / Defensa / Centrocampista / Delantero).
+estado = json.loads((data_dir / 'dna_estado.json').read_text(encoding='utf-8')).get('minutes', {})
+entries = [(k, v) for k, v in demar.items()]
+_seen_keys = {' '.join(k.split()) for k in demar}
+for k in estado:
+    kk = ' '.join(k.split())
+    if kk not in _seen_keys:
+        entries.append((kk, GEN[kk.split('|')[2]]))
+        _seen_keys.add(kk)
 
 team_by_tk = {}
 for tid, name in fichas['equipos'].items():
@@ -68,10 +80,11 @@ def fallback_photo(name, tid):
     return c.pop() if len(c) == 1 else None
 
 players, seen = {}, set()
+MERGED = []
 (out / 'assets' / 'players').mkdir(parents=True, exist_ok=True)
 (out / 'assets' / 'teams').mkdir(parents=True, exist_ok=True)
 nophoto = []
-for key, code in demar.items():
+for key, code in entries:
     name, team, _line = key.split('|')
     name = ' '.join(name.split())
     name = alias.get((dm._tk(team), dm._n(name)), name)
@@ -83,9 +96,13 @@ for key, code in demar.items():
     info = dm.lookup(data_dir, name, team)
     pid = info['photo'].rsplit('/', 1)[1][:-4] if info['photo'] else fallback_photo(name, tid)
     lst = players.setdefault(tid, [])
-    dup = next((p for p in lst if p['pos'] == DEM[code] and same_person(p['name'], name)), None)
+    generic = code.startswith('G_')
+    dup = next((p for p in lst if (p['pos'] == DEM[code] or generic) and (same_person(p['name'], name) or dm._name_match(p['name'], name)
+                or dm._toks(p['name'])[-1:] == dm._toks(name)[-1:] and dm._toks(p['name'])[0][:4] == dm._toks(name)[0][:4]
+                or ''.join(dm._toks(p['name'])).startswith(''.join(dm._toks(name))[:8]) and len(''.join(dm._toks(name))) >= 8)), None)
     if dup:   # mismo jugador partido en dos nombres: una sola tarjeta, nombre corto
-        if len(name) < len(dup['name']): dup['name'] = name
+        MERGED.append(f"{name} -> {dup['name']} ({team})")
+        if len(name) < len(dup['name']) and not generic: dup['name'] = name
         if not dup['photo'] and pid: dup['photo'] = pid
         continue
     lst.append({'name': name, 'pos': DEM[code], 'photo': pid, '_o': LINE[code], '_t': team})
@@ -115,4 +132,5 @@ teams.sort(key=lambda t: t['name'])
     encoding='utf-8')
 print('equipos', len(teams), 'jugadores', sum(map(len, players.values())), 'sin foto', len(nophoto))
 print(sorted(len(v) for v in players.values()))
-print(nophoto)
+print('fusionados', len(MERGED)); print('\n'.join(MERGED))
+print('sin foto', len(nophoto))
