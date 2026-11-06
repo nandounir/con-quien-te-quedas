@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>¿Con quién te quedas? · ADN PLAYER · THE EYE INTELLIGENCE UNIT</title>
 <meta name="description" content="Elige entre dos jugadores de tu equipo de Primera RFEF hasta ordenar la plantilla a tu manera. Un juego de ADN PLAYER · THE EYE INTELLIGENCE UNIT.">
-<link rel="stylesheet" href="fonts.css">
+<link rel="stylesheet" href="fonts.css?v=202611061448">
 <style>
 :root{
   --page:#f6f3ee; --ink:#14181f; --muted:#6c7079; --line:#e6e1d8; --accent:#c9382c;
@@ -409,7 +409,7 @@ img{display:block}
   </div>
 </div></div>
 
-<script src="data.js"></script>
+<script src="data.js?v=202611061448"></script>
 <script>
 (function () {
   'use strict';
@@ -463,7 +463,7 @@ img{display:block}
   function loadPhotos(tid) {
     return new Promise(function (res) {
       if (PH[tid]) return res();
-      var s = document.createElement('script'); s.src = 'fotos/' + tid + '.js';
+      var s = document.createElement('script'); s.src = 'fotos/' + tid + '.js?v=202611061448';
       s.onload = s.onerror = function () { res(); }; document.head.appendChild(s);
     });
   }
